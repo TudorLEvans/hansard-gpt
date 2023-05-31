@@ -35,6 +35,8 @@ user_agent = user_agent_rotator.get_random_user_agent()
 
 def create_driver():
     options = webdriver.ChromeOptions()
+    
+    options.add_argument("--headless")
 
     isExist = os.path.exists(DOWNLOAD_PATH)
     if isExist:
