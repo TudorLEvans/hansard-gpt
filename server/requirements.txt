@@ -1,0 +1,9 @@
+fastapi
+openai
+numpy
+selenium
+pandas
+sentence-transformers
+random_user_agent
+webdriver_manager
+uvicorn

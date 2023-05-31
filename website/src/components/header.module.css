@@ -1,0 +1,22 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  max-width: var(--max-width);
+  gap: var(--spacing-lg);
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  justify-content: space-between;
+}
+
+.links {
+  display: flex;
+  gap: var(--spacing-lg);
+}
+
+.navlink {
+  color: inherit;
+}
+
+.navlink:hover {
+  color: var(--secondary-colour);
+}

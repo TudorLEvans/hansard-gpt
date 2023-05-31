@@ -1,0 +1,20 @@
+.textarea {
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+.form {
+  width: 100%;
+  max-width: var(--max-width);
+  padding-top: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--secondary-border-colour);
+  margin-bottom: var(--spacing-xl);
+}
+
+.subtext {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 0.8rem;
+  padding: var(--spacing-sm);
+}
