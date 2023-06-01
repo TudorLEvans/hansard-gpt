@@ -22,6 +22,10 @@ export default function Home() {
 
   return (
     <>
+      <p className={styles.label}>
+        This site is not affialated with the UK Government, nor does it make
+        money. All data is used under the Open Government License 2.0.
+      </p>
       <InputForm onSubmit={onSubmit} />
       {loading && <Spinner />}
       {!loading && error && (
@@ -65,7 +69,9 @@ export default function Home() {
                 Proceedings from {item.date} -{" "}
                 <Link href={item.link}>Read it in Hansard</Link>
               </p>
-              <p className={styles.source}><blockquote>{item.text}</blockquote></p>
+              <p className={styles.source}>
+                <blockquote>{item.text}</blockquote>
+              </p>
             </section>
           ))}
         </div>

@@ -3,11 +3,11 @@
 export default function About() {
   return (
     <>
-      <h1>Welcome to Parliament GPT</h1>
+      <h1>Welcome to Common GPT</h1>
       <p>A Tudor Evans Proof of Concept</p>
       <div>
         <p>
-          Hansard GPT is proof of concept attempt to provide a simple search
+          Commons GPT is proof of concept attempt to provide a simple search
           interface for querying the UK government's Hansard transcripts. These
           transcripts constitute a near universal record of what is said in the
           Houses of Parliamentary. It's a lot of data! And it's not so easy to

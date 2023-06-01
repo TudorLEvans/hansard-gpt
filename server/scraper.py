@@ -21,8 +21,8 @@ from selenium.webdriver.support import expected_conditions as EC
 DOWNLOAD_PATH = os.getenv("DOWNLOAD_PATH", "D:\\hansard\\tmp")
 
 STORAGE_PATH = os.getenv("STORAGE_PATH", "D:\\hansard")
-START_DATE = datetime(2023, 3, 15)
-END_DATE = datetime(2023, 3, 31)
+START_DATE = datetime(2023, 3, 1)
+END_DATE = datetime(2023, 3, 10)
 
 # Rotate user agents to trick the rate limiting system into thinking I'm many people
 software_names = [SoftwareName.CHROME.value]
@@ -36,7 +36,7 @@ user_agent = user_agent_rotator.get_random_user_agent()
 def create_driver():
     options = webdriver.ChromeOptions()
     
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
 
     isExist = os.path.exists(DOWNLOAD_PATH)
     if isExist:
@@ -64,47 +64,47 @@ class Sitting:
     text: Optional[str]
 
 
-def get_meetings(start_date: datetime, end_date: datetime) -> List[str]:
+def get_meetings(string_date: str) -> List[str]:
     meetings: List[Sitting] = []
-    day_count = (end_date - start_date).days + 1
-    for debate_date in (start_date + timedelta(n) for n in range(day_count)):
-        string_date = debate_date.strftime("%Y-%m-%d")
-        try:
-            driver = create_driver()
-            driver.get(f"https://hansard.parliament.uk/commons/{string_date}")
-            time.sleep(4)
-            WebDriverWait(driver, 5) # .until(EC.to(By.XPATH, '//a[@class="card card-section"]'))
-            links = driver.find_elements(By.XPATH, '//a[@class="card card-section"]')
-            for link in links:
-                href = link.get_attribute("href")
-                meeting_id = href.split("/")[6]
-                title = href.split("/")[7]
-                sitting = Sitting(meeting_id, title, string_date, href, None)
-                meetings.append(sitting)
-        except Exception as e:
-            print("Failed to get meeting ids for date ", string_date, e)
+    string_date = debate_date.strftime("%Y-%m-%d")
+    try:
+        driver = create_driver()
+        driver.get(f"https://hansard.parliament.uk/commons/{string_date}")
+        WebDriverWait(driver, 3)
+        time.sleep(4)
+        links = driver.find_elements(By.XPATH, '//a[@class="card card-section"]')
+        for link in links:
+            href = link.get_attribute("href")
+            meeting_id = href.split("/")[6]
+            title = href.split("/")[7]
+            sitting = Sitting(meeting_id, title, string_date, href, None)
+            meetings.append(sitting)
+    except Exception as e:
+        print("Failed to get meeting ids for date ", string_date, e)
 
     return meetings
 
 
 def download_text(meeting_id: str) -> str:
-    try:
-        driver = create_driver()
-        time.sleep(4)
-        driver.get(
-            f"https://hansard.parliament.uk/debates/GetDebateAsText/{meeting_id}"
-        )
-        WebDriverWait(driver, 5)
-        filenames = next(os.walk(DOWNLOAD_PATH), (None, None, []))[2]
-        output = ""
-        for file in filenames:
+    driver = create_driver()
+    time.sleep(4)
+    driver.get(
+        f"https://hansard.parliament.uk/debates/GetDebateAsText/{meeting_id}"
+    )
+    WebDriverWait(driver, 5)
+    filenames = next(os.walk(DOWNLOAD_PATH), (None, None, []))[2]
+    output = ""
+    for file in filenames:
+        try:
             with open(os.path.join(DOWNLOAD_PATH, file), "r", encoding="utf-8") as f:
                 output = f.read()
                 print(output)
             os.remove(os.path.join(DOWNLOAD_PATH, file))
-        return output
-    except Exception as e:
-        print("Failed to download file ", meeting_id, e)
+        except Exception as e:
+            print("Unable to read file, possibly harmless error for meeting ", meeting_id, e)
+    if output is None or output == "":
+        raise ValueError("Download empty or failed")
+    return output
 
 
 if __name__ == "__main__":
@@ -127,30 +127,37 @@ if __name__ == "__main__":
             cur.execute(schema)
             con.commit()
 
-        meetings = get_meetings(START_DATE, END_DATE)
+        day_count = (END_DATE - START_DATE).days + 1
 
-        # Loop through meetings and save them to a csv
-        # ideally I want to scrape once and be able to try different embedding approaches on this data afterwards
-        for meeting in meetings:
-            if (
-                cur.execute(
-                    "SELECT meeting_id FROM text_dumps WHERE meeting_id = ?",
-                    (meeting.meeting_id,),
-                ).fetchone()
-                is None
-            ):
-                meeting.text = download_text(meeting.meeting_id)
-                cur.execute(
-                    "INSERT INTO text_dumps (meeting_id, title, meeting_date, link, content) VALUES(?, ?, ?, ?, ?)",
-                    (
-                        meeting.meeting_id,
-                        meeting.title,
-                        meeting.date,
-                        meeting.link,
-                        meeting.text,
-                    ),
-                )
-                con.commit()
+        for debate_date in (START_DATE + timedelta(n) for n in range(day_count)):
+            string_date = debate_date.strftime("%Y-%m-%d")
+            meetings = get_meetings(string_date)
+
+            # Loop through meetings and save them to a csv
+            # ideally I want to scrape once and be able to try different embedding approaches on this data afterwards
+            for meeting in meetings:
+                try:
+                    if (
+                        cur.execute(
+                            "SELECT meeting_id FROM text_dumps WHERE meeting_id = ?",
+                            (meeting.meeting_id,),
+                        ).fetchone()
+                        is None
+                    ):
+                        meeting.text = download_text(meeting.meeting_id)
+                        cur.execute(
+                            "INSERT INTO text_dumps (meeting_id, title, meeting_date, link, content) VALUES(?, ?, ?, ?, ?)",
+                            (
+                                meeting.meeting_id,
+                                meeting.title,
+                                meeting.date,
+                                meeting.link,
+                                meeting.text,
+                            ),
+                        )
+                        con.commit()
+                except Exception as e:
+                    print("Something went wrong downloading transcript", meeting.meeting_id, e)
         cur.close()
     except sqlite3.Error as error:
         print("Failed to read data from table", error)
