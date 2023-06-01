@@ -49,7 +49,7 @@ export default function Home() {
               <>
                 <p>{answer.answer}</p>
                 <p className={styles.label}>
-                  This answer was generated using ChatGPT. It's accuracy cannot
+                  This answer was generated using ChatGPT. It&apos;s accuracy cannot
                   be guaranteed, so check what it says against the sources
                   listed.
                 </p>
@@ -63,7 +63,7 @@ export default function Home() {
             )}
           </section>
           {answer?.sources?.map((item: any) => (
-            <section>
+            <section key={item?.meeting_id}>
               <p className={styles.label}>SOURCE</p>
               <p>
                 Proceedings from {item.date} -{" "}
