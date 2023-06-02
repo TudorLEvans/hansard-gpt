@@ -1,11 +1,12 @@
 "use client";
+import styles from './page.module.css'
 
 export default function About() {
   return (
     <>
-      <h1>Welcome to Common GPT</h1>
-      <p>A Tudor Evans Proof of Concept</p>
-      <div>
+      <h1>Welcome to Commons GPT</h1>
+      <p className={styles.label}>A Tudor Evans Proof of Concept</p>
+      <div className={styles.textBlock}>
         <p>
           Commons GPT is proof of concept attempt to provide a simple search
           interface for querying the UK government&apos;s Hansard transcripts. These

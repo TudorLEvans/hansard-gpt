@@ -21,8 +21,8 @@ from selenium.webdriver.support import expected_conditions as EC
 DOWNLOAD_PATH = os.getenv("DOWNLOAD_PATH", "D:\\hansard\\tmp")
 
 STORAGE_PATH = os.getenv("STORAGE_PATH", "D:\\hansard")
-START_DATE = datetime(2023, 3, 1)
-END_DATE = datetime(2023, 3, 10)
+START_DATE = datetime(2023, 2, 1)
+END_DATE = datetime(2023, 2, 22)
 
 # Rotate user agents to trick the rate limiting system into thinking I'm many people
 software_names = [SoftwareName.CHROME.value]

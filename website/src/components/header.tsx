@@ -12,6 +12,9 @@ export default function Header() {
         <Link className={styles.navlink} href="/about">
           About
         </Link>
+        <Link className={styles.navlink}  href="https://github.com/TudorLEvans/hansard-gpt">
+          Source Code
+        </Link>
       </div>
     </div>
   );

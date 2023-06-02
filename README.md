@@ -24,7 +24,7 @@ You can scrape data by running:
 python server/scraper.py
 ```
 
-This will take some time, and will dump the data in a sqlite file at a path of your choice.
+This will take some time, and will dump the data in a sqlite file at a path of your choice. It will run a bunch of selenium browsers to get past the gov bot detectors.
 
 ## Chunking and Embedding
 
@@ -47,5 +47,13 @@ python -m uvicorn server.main:app --reload
 A sample request to the server might look something like:
 
 ```
-curl --location --request GET 'localhost:8000/answers?q=who%20am%20I?'
+curl --location --request POST 'localhost:8000/answers' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "question": "This is a question"
+}'
 ```
+
+## Deployment
+
+This app is deployed to a simple VM with an nginx server sitting in front of it. The files for the UI are built using the npm run build command. The output that gets sent to the out folder is then copied to the folder /var/www/commonsgpt.com, from which nginx serves the content. The nginx config is saved to /etc/nginx/sites-enabled/commonsgpt.com. The server runs on port 8080 as a gunicorn process.

@@ -12,7 +12,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Head>
-        <title>Hansard GPT</title>
+        <title>Commons GPT</title>
         <meta
           property="description"
           content="Search through Hansard with the help of the latest AI technology"

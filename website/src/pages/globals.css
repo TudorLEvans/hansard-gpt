@@ -59,6 +59,10 @@ body {
   align-items: center;
 }
 
+h1 {
+  text-align: center;
+}
+
 p {
   white-space: pre-line;
   margin-bottom: var(--spacing-md);

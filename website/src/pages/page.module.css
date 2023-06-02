@@ -26,3 +26,20 @@
 .source {
   font-style: italic;
 }
+
+.textBlock {
+  margin-left: calc(2*var(--spacing-xl));
+  margin-right: calc(2*var(--spacing-xl));
+  margin-top: var(--spacing-xl);
+}
+
+@media screen and (max-width: 1000px) {
+  .textBlock {
+    margin-left: var(--spacing-xs);
+    margin-right: var(--spacing-xs);
+  } 
+}
+
+.textBlock p {
+  margin-bottom: var(--spacing-lg)
+}

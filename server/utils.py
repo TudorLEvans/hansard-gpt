@@ -1,4 +1,4 @@
-from server.scraper import Sitting
+from scraper import Sitting
 
 
 def chunk_data(sitting: Sitting):
