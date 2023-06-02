@@ -15,7 +15,7 @@ export default function useQuery() {
       try {
         setError(undefined)
         setIsLoading(true);
-        const res = await fetch("http://localhost:8000/answers", {
+        const res = await fetch("https://api.commonsgpt.com/answers", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

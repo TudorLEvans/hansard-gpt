@@ -7,8 +7,8 @@ from typing import List, Union
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-from scraper import STORAGE_PATH, Sitting
-from utils import chunk_data
+from server.scraper import STORAGE_PATH, Sitting
+from server.utils import chunk_data
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(message)s")
 LOGGER = logging.getLogger("server")
