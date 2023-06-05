@@ -1,6 +1,6 @@
-# Hansard GPT
+# Commons GPT
 
-A vector-based search system for the Government's Hansard data set
+A vector-based search system for the Government's Hansard data set. The app is deployed at [commonsgpt.com](https://commonsgpt.com).
 
 ## Installing
 
