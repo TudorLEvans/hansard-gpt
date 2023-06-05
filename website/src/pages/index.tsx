@@ -24,7 +24,7 @@ export default function Home() {
     <>
       <p className={styles.label}>
         This site is not affialated with the UK Government, nor does it make
-        money. All data is used under the Open Government License 2.0.
+        money. All data is used under the Open Government License 2.0. Only uses data starting Feb 2023 (will add more soon).
       </p>
       <InputForm onSubmit={onSubmit} />
       {loading && <Spinner />}
