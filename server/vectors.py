@@ -49,7 +49,7 @@ class LocalStore:
                 ),
             )
         except sqlite3.Error as error:
-            print("Failed to read data from table", error)
+            LOGGER.error("Failed to read data from table", error)
 
     def reset(self, cur):
         """

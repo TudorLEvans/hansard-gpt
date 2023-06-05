@@ -56,4 +56,29 @@ curl --location --request POST 'localhost:8000/answers' \
 
 ## Deployment
 
-This app is deployed to a simple VM with an nginx server sitting in front of it. The files for the UI are built using the npm run build command. The output that gets sent to the out folder is then copied to the folder /var/www/commonsgpt.com, from which nginx serves the content. The nginx config is saved to /etc/nginx/sites-enabled/commonsgpt.com. The server runs on port 8080 as a gunicorn process.
+This app is deployed to a simple VM with an nginx server sitting in front of it. The files for the UI are built using the npm run build command. The output that gets sent to the out folder is then copied to the folder /var/www/commonsgpt.com, from which nginx serves the content. The nginx config is saved to /etc/nginx/sites-enabled/commonsgpt.com. The server runs on port 8080 as a gunicorn process. The nginx process can be reloaded with:
+
+```bash
+systemctl restart nginx
+
+and check it works
+
+systemctl status nginx
+```
+
+The command line utility [supervisord](http://supervisord.org/introduction.html) is being used to orchestrate the running of the API, along with gunicorn. The file supervisord.conf should be added to /etc/supervisor/conf.d and then the commands to run it are:
+
+```bash
+supervisorctl reread
+supervisorctl update
+```
+
+And you can check the status with the command:
+
+```bash
+supervisorctl status
+
+and for error logs
+
+cat /var/log/idle.err.log
+```

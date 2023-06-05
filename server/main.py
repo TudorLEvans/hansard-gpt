@@ -1,4 +1,5 @@
 import os
+import logging
 import sqlite3
 from typing import List
 
@@ -11,6 +12,9 @@ from sentence_transformers import SentenceTransformer
 
 from server.scraper import STORAGE_PATH, Sitting
 from server.vectors import LocalStore
+
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(message)s")
+LOGGER = logging.getLogger("server")
 
 model = SentenceTransformer("all-MiniLM-L6-v2")
 store = LocalStore()
@@ -39,7 +43,7 @@ async def startup_event():
         store.reset(cur)
         cur.close()
     except sqlite3.Error as error:
-        print("Failed to read data from table", error)
+        LOGGER.error("Failed to read data from table", error)
     finally:
         if con:
             con.close()
@@ -54,7 +58,7 @@ async def create_item(question: Question):
         answer = get_answer(cur, question.question)
         return answer
     except sqlite3.Error as error:
-        print("Failed to read data from table", error)
+        LOGGER.error("Failed to read data from table", error)
     finally:
         if con:
             con.close()
